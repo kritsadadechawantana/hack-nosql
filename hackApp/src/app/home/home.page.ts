@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { CoinPriceUpdate } from '../../models/CoinPriceUpdate';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ import { CoinPriceUpdate } from '../../models/CoinPriceUpdate';
 })
 export class HomePage {
   priceUpdate : CoinPriceUpdate;
-  constructor(public navCtrl: NavController, private http: HttpClient) {
+  constructor(public navCtrl: NavController, private http: HttpClient, public navParams: ActivatedRoute) {
     this.data();
   }
   public data(){
@@ -22,8 +23,8 @@ export class HomePage {
       })
       
   }
-  gotobuy() {
-    this.navCtrl.navigateForward("pbuycoin");
+  gotobuy(param : string) {
+    this.navCtrl.navigateForward("pbuycoin/"+param);
   }
-
+ 
 }

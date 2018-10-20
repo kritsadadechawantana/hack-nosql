@@ -13,8 +13,8 @@ const routes: Routes = [
   },
   
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
-  { path: 'pbuycoin', loadChildren: './pbuycoin/pbuycoin.module#PbuycoinPageModule' },
-  { path: 'psalecoin', loadChildren: './psalecoin/psalecoin.module#PsalecoinPageModule' },
+  { path: 'pbuycoin/:symbol', loadChildren: './pbuycoin/pbuycoin.module#PbuycoinPageModule' },
+  { path: 'psalecoin/:symbol', loadChildren: './psalecoin/psalecoin.module#PsalecoinPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' }
 
 ];
