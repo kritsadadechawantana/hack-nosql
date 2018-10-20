@@ -43,12 +43,12 @@ namespace WalletSampleApi.Dac
 
         public void Update(CustomerWallet document)
         {
-            Collection.ReplaceOne(it => it.Id == document.Id, document);
+            Collection.ReplaceOne(it => it.Username == document.Username, document);
         }
 
         public void Remove(CustomerWallet document)
         {
-            Collection.DeleteOne(it => it.Id == document.Id);
+            Collection.DeleteOne(it => it.Username == document.Username);
         }
     }
 }

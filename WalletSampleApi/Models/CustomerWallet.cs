@@ -9,8 +9,8 @@ namespace WalletSampleApi.Models
     public class CustomerWallet
     {
         [BsonId]
-        public string Id { get; set; }
         public string Username { get; set; }
+        public double Balance { get; set; }
         public List<CustomerCoin> Coins { get; set; }
     }
 
@@ -29,5 +29,9 @@ namespace WalletSampleApi.Models
         /// มูลค่าหากแลกเป็น USD ตอนนี้
         /// </summary>
         public double USDValue { get; set; }
+        /// <summary>
+        /// จำนวนที่ถือ
+        /// </summary>
+        public double Amount { get; set; }
     }
 }
