@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace WalletSampleApi.Models
 {
     public class CustomerWallet
     {
+        [BsonId]
+        public string Id { get; set; }
         public string Username { get; set; }
         public List<CustomerCoin> Coins { get; set; }
     }
