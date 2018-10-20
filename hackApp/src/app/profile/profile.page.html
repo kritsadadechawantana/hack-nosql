@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    <ion-title>proflie</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card>
+    <ion-card-header>
+        <ion-label>
+            Username :{{ Wallet.Username }}
+        </ion-label>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-label>
+            Balance :{{ Wallet.Balance }}
+        </ion-label>
+    </ion-card-content>
+    </ion-card>
+        <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    Symbol
+                  </ion-col>
+                  <ion-col>
+                    Buy
+                  </ion-col>
+                  <ion-col>
+                    USD
+                  </ion-col>
+                  <ion-col>
+                    Amount
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <ion-list *ngFor="let n of Wallet.Coins">
+                <ion-item>
+                  <ion-grid>
+                    <ion-row align-items-center>
+                      <ion-col>
+                        {{ n.Symbol }}
+                      </ion-col>
+                      <ion-col>
+                        {{ n.BuyingRate}}
+                      </ion-col>
+                      <ion-col>
+                        {{ n.USDValue }}
+                      </ion-col>
+                      <ion-col>
+                            {{ n.Amount }}
+                          </ion-col>
+                      <ion-col>
+                            <ion-button ion-button color="dark" (click)="gotosale()">sale</ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ion-list>
+  
+   
+    
+</ion-content>

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Home
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding text-center>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        Coin
+      </ion-col>
+      <ion-col>
+        USD
+      </ion-col>
+      <ion-col>
+        Update
+      </ion-col>
+      <ion-col>
+        Trade
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list *ngFor="let n of priceUpdate.PriceList">
+    <ion-item>
+      <ion-grid>
+        <ion-row align-items-center>
+          <ion-col>
+            {{ n.Symbol }}
+          </ion-col>
+          <ion-col>
+            {{ n.Buy}}
+          </ion-col>
+          <ion-col>
+            {{ n.Sell }}
+          </ion-col>
+          <ion-col>
+            <ion-button size="small" color="dark" (click)="gotobuy()">buy</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>
