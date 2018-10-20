@@ -21,18 +21,18 @@ namespace WalletSampleApi.Controllers
             this.coinPriceUpdateDac = coinPriceUpdateDac;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<CoinPriceUpdate> CoinPriceUpdate(string id)
+        [HttpGet()]
+        public ActionResult<CoinPriceUpdate> CoinPriceUpdate()
         {
             return coinPriceUpdateDac.List(it => true)
             .OrderByDescending(it => it.At)
             .FirstOrDefault();
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<CustomerWallet> CustomerWallet(string id)
+        [HttpGet("{username}")]
+        public ActionResult<CustomerWallet> CustomerWallet(string username)
         {
-            var wallet = customerWalletDac.Get(it => it.Username == id);
+            var wallet = customerWalletDac.Get(it => it.Username == username);
             var currentPrice = coinPriceUpdateDac.List(it => true)
             .OrderByDescending(it => it.At)
             .FirstOrDefault();
@@ -54,6 +54,7 @@ namespace WalletSampleApi.Controllers
             return Ok();
         }
 
+        [HttpGet("{username}/{symbol}/{amount}")]
         public ActionResult Buy(string username, string symbol, double amount)
         {
             var currentPrice = coinPriceUpdateDac.List(it => true)
@@ -81,6 +82,7 @@ namespace WalletSampleApi.Controllers
             return Ok();
         }
 
+        [HttpGet("{username}/{id}")]
         public ActionResult Sell(string username, string id)
         {
             var currentPrice = coinPriceUpdateDac.List(it => true)
