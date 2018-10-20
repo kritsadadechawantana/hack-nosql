@@ -43,6 +43,8 @@ namespace WalletSampleApi
             services.AddTransient<DatabaseConfigurations>(svc => dbConfig);
             services.AddTransient<ICustomerWalletDac, CustomerWalletDac>();
             services.AddTransient<ICoinPriceUpdateDac, CoinPriceUpdateDac>();
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +54,8 @@ namespace WalletSampleApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod());
 
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseSwaggerUi3WithApiExplorer(settings =>

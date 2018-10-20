@@ -16,6 +16,8 @@ namespace WalletSampleApi.Models
 
     public class CustomerCoin
     {
+        [BsonId]
+        public string Id { get; set; }
         public string Symbol { get; set; }
         /// <summary>
         /// ราคาตอนซื้อ

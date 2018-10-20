@@ -32,26 +32,79 @@ namespace WalletSampleApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<CustomerWallet> CustomerWallet(string id)
         {
-            return customerWalletDac.Get(it => it.Username == id);
+            var wallet = customerWalletDac.Get(it => it.Username == id);
+            var currentPrice = coinPriceUpdateDac.List(it => true)
+            .OrderByDescending(it => it.At)
+            .FirstOrDefault();
+
+            wallet.Coins.ForEach(it => {
+                var priceInfo = currentPrice.PriceList.FirstOrDefault(c => c.Symbol == it.Symbol); 
+                it.USDValue = priceInfo.Sell * it.Amount;
+            });
+
+            return wallet;
         }
 
         [HttpPost]
-        public void Post([FromBody] CoinPriceUpdate updateCoin)
+        public ActionResult Post([FromBody] CoinPriceUpdate updateCoin)
         {
             var genId = Guid.NewGuid().ToString();
             updateCoin.Id = genId;
             coinPriceUpdateDac.Create(updateCoin);
+            return Ok();
         }
 
-        public void Buy(string username, string symbol, double amount)
+        public ActionResult Buy(string username, string symbol, double amount)
         {
             var currentPrice = coinPriceUpdateDac.List(it => true)
             .OrderByDescending(it => it.At)
             .FirstOrDefault();
+
+            var customerWallet = customerWalletDac.Get(it => it.Username == username);
+
+            var coinInfo = currentPrice.PriceList.FirstOrDefault(it => it.Symbol == symbol);
+            var chargeBalanceAmount = coinInfo.Buy * amount;
+            
+            var inValidRequest = chargeBalanceAmount < customerWallet.Balance;
+            if (inValidRequest) return BadRequest();
+
+            customerWallet.Balance -= chargeBalanceAmount;
+            customerWallet.Coins.Add(new CustomerCoin{
+                Symbol = symbol,
+                Amount = amount,
+                BuyingRate = coinInfo.Buy,
+                BuyingAt = DateTime.UtcNow
+            });
+
+            customerWalletDac.Update(customerWallet);
+
+            return Ok();
+        }
+
+        public ActionResult Sell(string username, string id)
+        {
+            var currentPrice = coinPriceUpdateDac.List(it => true)
+            .OrderByDescending(it => it.At)
+            .FirstOrDefault();
+
+            var customerWallet = customerWalletDac.Get(it => it.Username == username);
+            var selectedCoin = customerWallet.Coins.FirstOrDefault(it => it.Id == id);
+            var coinInfo = currentPrice.PriceList.FirstOrDefault(it => it.Symbol == selectedCoin.Symbol);
+            var chrageBalanceAmount = coinInfo.Sell * selectedCoin.Amount;
+
+            var inValidRequest = chrageBalanceAmount < customerWallet.Balance;
+            if (inValidRequest) return BadRequest();
+            
+            customerWallet.Balance += chrageBalanceAmount;
+            customerWallet.Coins.Remove(selectedCoin);
+
+            customerWalletDac.Update(customerWallet);
+
+            return Ok();
         }
 
         [HttpPost]
-        public void UpdateCoinPrice([FromBody] CoinPriceUpdate updateCoin)
+        public ActionResult UpdateCoinPrice([FromBody] CoinPriceUpdate updateCoin)
         {
             var lastCoinPrice = coinPriceUpdateDac.List(it => true)
             .OrderByDescending(it => it.At)
@@ -69,6 +122,8 @@ namespace WalletSampleApi.Controllers
             });
 
             coinPriceUpdateDac.Update(lastCoinPrice);
+
+            return Ok();
         }
 
         [HttpPost]
@@ -89,8 +144,8 @@ namespace WalletSampleApi.Controllers
                     Username = "User1",
                     Balance = 15000,
                     Coins = new List<CustomerCoin>{
-                        new CustomerCoin{Symbol = "BTC", BuyingAt = DateTime.Now, Amount = 1, BuyingRate = 6565.25, USDValue = 6565.25},
-                        new CustomerCoin{Symbol = "ETH", BuyingAt = DateTime.Now, Amount = 1, BuyingRate = 203.47, USDValue = 203.47}
+                        new CustomerCoin{Id = "1", Symbol = "BTC", BuyingAt = DateTime.Now, Amount = 1, BuyingRate = 6565.25, USDValue = 6565.25},
+                        new CustomerCoin{Id = "1", Symbol = "ETH", BuyingAt = DateTime.Now, Amount = 1, BuyingRate = 203.47, USDValue = 203.47}
                     }
                 }
             };
