@@ -1,9 +1,15 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="background-color: orchid">
     <ion-title>login</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding text-center style="background-color: pink">
+  <ion-img src="../../assets/icon/Reward.png" width="300px" height="300px"></ion-img>
+    <ion-item>
+        <ion-label position="floating">UserName :</ion-label>
+        <ion-input></ion-input>
+      </ion-item>
+    <ion-button color="tertiary" (click)="sub()">Login</ion-button>
 
 </ion-content>
